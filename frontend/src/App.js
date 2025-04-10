@@ -123,7 +123,7 @@ function App() {
                   <div className="error-message">
                     <p>Error: {error}</p>
                     <p className="error-hint">
-                      Make sure your server is running at http://127.0.0.1:5000
+                      Make sure your server is running 
                     </p>
                   </div>
                 ) : prediction ? (
