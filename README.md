@@ -50,7 +50,9 @@ python app.py
 ```
 
 ### frontend
+```bash
 npm install
 npm start
+```
 
 
