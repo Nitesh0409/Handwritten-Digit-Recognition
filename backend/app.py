@@ -14,6 +14,7 @@ CORS(app)  # Enable CORS
 with open("logistic_model.pkl", "rb") as file:
     Theta_opt = pickle.load(file)
 
+# Ensure saved_images directory exists
 os.makedirs("saved_images", exist_ok=True)
 
 # Softmax function
@@ -23,15 +24,19 @@ def softmax(Z):
 
 # Add bias term to input
 def add_bias_term(X):
-    m = X.shape[0]
-    return np.c_[np.ones((m, 1)), X]
+    return np.c_[np.ones((X.shape[0], 1)), X]
 
 # Predict class
 def predict_class(X, Theta):
     Z = np.dot(X, Theta)  # Compute raw scores
-    probabilities = softmax(Z)  # Apply softmax
-    predicted_class = np.argmax(probabilities, axis=1)  # Get highest probability class
-    return predicted_class[0], probabilities  # Return class & probability
+    probabilities = softmax(Z)
+    predicted_class = np.argmax(probabilities, axis=1)
+    return predicted_class[0], probabilities
+
+# ✅ Health check route
+@app.route("/", methods=["GET"])
+def home():
+    return "✅ Flask backend is running!", 200
 
 # API endpoint for prediction
 @app.route("/predict", methods=["POST"])
@@ -42,46 +47,39 @@ def predict_digit():
         input_data = data.get("data")  # 784 pixel values
         print(f"input data = {input_data}")
 
+        # Process image (optional)
         if image_data:
             img_bytes = base64.b64decode(image_data.split(",")[1])
-            img = Image.open(io.BytesIO(img_bytes)).convert("L")  # Convert to grayscale
+            img = Image.open(io.BytesIO(img_bytes)).convert("L")
 
-            original_path = "saved_images/saved_image_original.png"
-            img.save(original_path)
+            # Save original image
+            img.save("saved_images/saved_image_original.png")
 
-            # Resize image to 28x28
+            # Resize to 28x28
             img_resized = img.resize((28, 28), Image.Resampling.LANCZOS)
-            print(f"(img_resized -> {img_resized})")  # just for checking
-
-            # Normalize pixels (0-255 → 0-1)
-            img_array = np.array(img_resized) / 255.0  
-
-            # Save resized image
-            resized_path = "saved_images/saved_image_28x28.png"
-            img_resized.save(resized_path)
+            img_resized.save("saved_images/saved_image_28x28.png")
 
         if not input_data or len(input_data) != 784:
             return jsonify({"error": "Invalid input data size"}), 400
 
         X_input = np.array(input_data).reshape(1, -1)
-        print(f"(X_input: {X_input})")
-
         X_input_bias = add_bias_term(X_input)
 
-        # Predict
         y_pred, P_test = predict_class(X_input_bias, Theta_opt)
 
-        # Prepare response
         response = {
             "predicted_class": int(y_pred),
-            "probabilities": {str(i): round(float(prob * 100), 2) for i, prob in enumerate(P_test[0])}
+            "probabilities": {
+                str(i): round(float(prob * 100), 2)
+                for i, prob in enumerate(P_test[0])
+            }
         }
         return jsonify(response)
 
     except Exception as e:
+        print(f"❌ Error: {e}")
         return jsonify({"error": str(e)}), 400
 
 # Run Flask app
 if __name__ == "__main__":
-    app.run(debug=True)
-
+    app.run(host="0.0.0.0", port=3000)
