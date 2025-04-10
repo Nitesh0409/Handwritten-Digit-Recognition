@@ -141,7 +141,7 @@ function App() {
         </main>
 
         <footer className="app-footer">
-          <p>Thanks for you time !!! 😊</p>
+          <p>Thanks for your time !!! 😊</p>
         </footer>
       </div>
     </div>
