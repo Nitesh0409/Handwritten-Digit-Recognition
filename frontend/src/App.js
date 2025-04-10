@@ -17,7 +17,7 @@ function App() {
     setError(null);
 
     try {
-      const response = await fetch(BACKEND_URL, {
+      const response = await fetch(`${BACKEND_URL}/predict`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
