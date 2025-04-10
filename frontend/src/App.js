@@ -4,6 +4,9 @@ import PredictionResults from "./components/PredictionResults";
 import "./App.css";
 
 function App() {
+  const BACKEND_URL = "https://7d5cc8cf-a512-4c76-9316-2765db051324-00-2em18ztpaq8sd.sisko.replit.dev";
+
+  
   const drawingCanvasRef = useRef(null);
   const [prediction, setPrediction] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -14,7 +17,7 @@ function App() {
     setError(null);
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/predict", {
+      const response = await fetch(BACKEND_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
