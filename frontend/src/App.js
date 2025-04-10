@@ -4,7 +4,8 @@ import PredictionResults from "./components/PredictionResults";
 import "./App.css";
 
 function App() {
-  const BACKEND_URL = "https://7d5cc8cf-a512-4c76-9316-2765db051324-00-2em18ztpaq8sd.sisko.replit.dev";
+  const BACKEND_URL = "https://handwritten-digit-recognition-by99.onrender.com";
+  
 
   
   const drawingCanvasRef = useRef(null);
