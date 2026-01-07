@@ -51,5 +51,4 @@ npm start
 
 This repository focuses on model integration and deployment.
 Detailed methodology and analysis are documented on the project webpage.
-pip install -r requirements.txt
-python app.py
+---
