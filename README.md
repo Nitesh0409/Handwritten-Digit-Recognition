@@ -51,4 +51,6 @@ npm start
 
 This repository focuses on model integration and deployment.
 Detailed methodology and analysis are documented on the project webpage.
+→ [Project Webpage](https://nitesh0409.github.io/prml_project_page/)
+
 ---
